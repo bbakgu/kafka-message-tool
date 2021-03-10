@@ -499,18 +499,6 @@ public class DefaultKafkaClusterProxy implements KafkaClusterProxy {
         final List<ApiVersionsResponse.ApiVersion> apiVersions = JavaConverters.seqAsJavaList(
             kafkaAdminClient.getApiVersions(node));
         brokerApiVersions.put(node, new NodeApiVersionsInfo(apiVersions));
-        printApiVersionForNode(node, apiVersions);
-    }
-
-    private void printApiVersionForNode(Node node, List<ApiVersionsResponse.ApiVersion> apiVersions) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(String.format("%n### Api version for node %s ###%n", node));
-        apiVersions.forEach(version -> {
-            builder.append(String.format("ApiKey '%s', min:%d .. max:%d%n", ApiKeys.forId(version.apiKey),
-                                         version.minVersion,
-                                         version.maxVersion));
-        });
-        Logger.debug(builder.toString());
     }
 }
 

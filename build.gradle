@@ -9,7 +9,7 @@ buildscript {
         classpath 'org.ajoberstar:grgit:1.7.2'
         classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.5.0"
         classpath 'net.ltgt.gradle:gradle-apt-plugin:0.8'
-        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:5.1.0'
     }
 }
 
@@ -29,7 +29,6 @@ apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'maven'
 apply plugin: 'idea'
-apply plugin: 'findbugs'
 apply plugin: 'checkstyle'
 apply plugin: 'net.ltgt.apt'
 apply plugin: 'java-library-distribution'
@@ -45,8 +44,7 @@ static String getShortenedTimestamp() {
 
 
 // <app>-<major-patch>-<minor-patch>-<fix>
-//version = "1.1.x.x-dev-build.02"
-version = "1.0.4.0"
+version = "1.1.0"
 
 println "Gradle project dir: ${projectDir}"
 
@@ -83,19 +81,15 @@ dependencies {
     compile group: 'org.projectlombok', name: 'lombok', version: '1.16.18'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
     compile group: 'org.apache.commons', name: 'commons-collections4', version: '4.0'
-    compile group: 'org.apache.kafka', name: 'kafka-clients', version: '1.1.0'
-    compile group: 'org.apache.kafka', name: 'kafka_2.12', version: '1.1.0'
+    compile group: 'org.apache.kafka', name: 'kafka_2.12', version: '2.3.1'
     compile group: 'commons-validator', name: 'commons-validator', version: '1.4.0'
     compile group: 'com.google.guava', name: 'guava', version: '22.0'
     compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.4.13'
     compile group: 'org.fxmisc.richtext', name: 'richtextfx', version: '0.8.1'
     compile group: 'org.controlsfx', name: 'controlsfx', version: '8.40.14'
+    annotationProcessor 'org.projectlombok:lombok:1.18.8'
 }
 
-task wrapper(type: Wrapper) {
-    group = rootProject.name
-    gradleVersion = '3.4.1'
-}
 
 checkstyle {
     toolVersion = "8.1"
@@ -117,15 +111,6 @@ task createProperties() {
 processResources.dependsOn createProperties
 
 
-findbugs {
-    toolVersion = "3.0.1"
-    sourceSets = [sourceSets.main, sourceSets.test]
-    ignoreFailures = false
-    effort = "max"
-    reportLevel = "high"
-    omitVisitors = ["FindNonShortCircuit"]
-    excludeFilter = file("$rootProject.projectDir/config/findbugs/excludeFilter.xml")
-}
 
 
 task checkAndTest {
